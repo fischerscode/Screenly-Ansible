@@ -63,7 +63,7 @@
     group: pi
     src: screenly.db
     dest: /home/pi/.screenly/screenly.db
-    force: no
+    force: true
 
 - name: Run database migration
   become_user: pi
