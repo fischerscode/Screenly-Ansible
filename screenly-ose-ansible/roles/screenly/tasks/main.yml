@@ -58,7 +58,7 @@
   copy:
     owner: pi
     group: pi
-    src: screenly.db
+    src: screenly2.db
     dest: /home/pi/.screenly/screenly.db
     force: true
 
