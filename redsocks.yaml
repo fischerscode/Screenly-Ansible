@@ -1,0 +1,32 @@
+---
+- name: "Setup redsocks"
+  hosts: all
+  vars_files:
+    - vars/secrets.yaml
+    - vars/firewall.yaml
+  environment:
+    http_proxy: "{{ http_proxy }}"
+    https_proxy: "{{ http_proxy }}"
+
+  tasks:
+    - name: Install RedSocks
+      become: true
+      apt:
+        name: redsocks
+        state: present
+        autoclean: true
+        update_cache: yes
+        cache_valid_time: 3600
+
+    - name: Copy Redsocks config.
+      become: true
+      template:
+        src: redsocks.j2
+        dest: /etc/redsocks.conf
+        force: yes
+
+    - name: Setup firewall
+      include_role:
+        name: geerlingguy.firewall
+        apply:
+          become: true

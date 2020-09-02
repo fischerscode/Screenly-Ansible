@@ -4,10 +4,12 @@
   vars_files:
     - vars/secrets.yaml
   vars:
-    proxy_env:
-      http_proxy: "{{ http_proxy }}"
-      https_proxy: "{{ http_proxy }}"
     screenly_repo: "https://github.com/Screenly/screenly-ose.git"
+
+  environment:
+    http_proxy: "{{ http_proxy }}"
+    https_proxy: "{{ http_proxy }}"
+
   tasks:
     - name: "Ensure pi-user has not the default password."
       become: true
@@ -27,20 +29,17 @@
       timezone:
         name: "Europe/Berlin"
 
-    - name: "Disable overscan"
+    - name: "HDMI settings"
       lineinfile:
         path: /boot/config.txt
-        regexp: "^#\\s*disable_overscan.*$"
-        line: "disable_overscan=1"
+        regexp: "{{ item.regexp }}"
+        line: "{{ item.line }}"
         state: present
-      become: true
-
-    - name: "Enable HDMI hotblug"
-      lineinfile:
-        path: /boot/config.txt
-        regexp: "^#\\s*hdmi_force_hotplug.*$"
-        line: "hdmi_force_hotplug=1"
-        state: present
+      with_items:
+        - { regexp: '^#\s*hdmi_force_hotplug.*$', line: 'hdmi_force_hotplug=1' }
+        - { regexp: '^#\s*disable_overscan.*$', line: 'disable_overscan=1' }
+        - { regexp: '^#\s*hdmi_group.*$', line: 'hdmi_group=1' }
+        - { regexp: '^#\s*hdmi_mode.*$', line: 'hdmi_mode={{ resolution }}' }
       become: true
 
     - name: "Install packages"
@@ -60,31 +59,12 @@
 - name: Install Screenly
   import_playbook: screenly-ose-ansible/site.yml
 
-- name: "Configure Screenly"
+- name: Install Redsocks
+  import_playbook: redsocks.yaml
+
+- name: "Reboot"
   hosts: all
   tasks:
-#    - name: "set user"
-#      lineinfile:
-#        dest: /home/pi/.screenly/screenly.conf
-#        regexp: "{{ item.regexp }}"
-#        line: "{{ item.line }}"
-#      with_items:
-#        - regexp: "^user(\\s*)=.*$"
-#          line: "user=test"
-#        - regexp: "^password(\\s*)=.*$"
-#          line: "password=ff2bea10041cceb054dd6417bc70e8e796edb94dfaeb7046b536509743fab619" #echo -n "password" | openssl dgst -sha256
-
-#    - name: "set default assets"
-#      copy:
-#        src: default_assets.yml
-#        dest: /home/pi/.screenly/default_assets.yml
-
-#    - name: "use default assets"
-#      lineinfile:
-#        dest: /home/pi/.screenly/screenly.conf
-#        regexp: "^default_assets(\\s*)=.*$"
-#        line: "default_assets = on"
-
     - name: "reboot"
       become: true
       reboot:
