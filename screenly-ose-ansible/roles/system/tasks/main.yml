@@ -48,6 +48,7 @@
   copy:
     src: /boot/cmdline.txt
     dest: /boot/cmdline.txt.orig
+    remote_src: true
     force: no
   when: not is_berryboot
   tags:
@@ -60,6 +61,7 @@
 - copy:
     src: /boot/cmdline.txt.orig
     dest: /boot/cmdline.txt
+    remote_src: true
     force: yes
   when: not is_berryboot and config_txt.stdout.find('NOOBS') == -1
   tags:

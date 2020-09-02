@@ -110,6 +110,7 @@
   copy:
     src: /lib/systemd/system/systemd-udevd.service
     dest: /etc/systemd/system/systemd-udevd.service
+    remote_src: true
 
 - name: Configure systemd-udevd service
   lineinfile:

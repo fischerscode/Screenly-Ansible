@@ -55,7 +55,10 @@
     - manage_network|bool == true
 
 - name: Copy org.freedesktop.NetworkManager.pkla to 50-local.d
-  command: cp -f /var/lib/polkit-1/localauthority/10-vendor.d/org.freedesktop.NetworkManager.pkla /etc/polkit-1/localauthority/50-local.d
+  copy:
+    src: /var/lib/polkit-1/localauthority/10-vendor.d/org.freedesktop.NetworkManager.pkla
+    dest: /etc/polkit-1/localauthority/50-local.d
+    remote_src: true
   when:
     - manage_network|bool == true
 
@@ -107,6 +110,7 @@
     src: /home/pi/ui/
     dest: /usr/local/share/wifi-connect/ui
     mode: 0755
+    remote_src: true
   when:
     - ansible_distribution_major_version|int >= 9
     - not resin_wifi_version_file_exist
@@ -117,6 +121,7 @@
     src: /home/pi/wifi-connect
     dest: /usr/local/sbin
     mode: 0755
+    remote_src: true
   when:
     - ansible_distribution_major_version|int >= 9
     - not resin_wifi_version_file_exist
