@@ -120,6 +120,7 @@
     src: /lib/systemd/system/systemd-udevd.service
     dest: /etc/systemd/system/systemd-udevd.service
     remote_src: true
+    force: false
 
 - name: Configure systemd-udevd service
   lineinfile:
@@ -150,5 +151,7 @@
     group: root
 
 - name: Enable screenly systemd services
-  command: systemctl enable {{ item }} chdir=/etc/systemd/system
+  systemd:
+    enabled: true
+    name: "{{ item }}"
   with_items: "{{ screenly_systemd_units }}"

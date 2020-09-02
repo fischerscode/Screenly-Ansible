@@ -2,6 +2,7 @@
 - name: Check screenly.conf
   command: cat /home/pi/.screenly/screenly.conf
   register: config
+  changed_when: false
   tags:
     - enable-ssl
 
@@ -61,10 +62,12 @@
   when: no_use_ssl_parameter
 
 - name: Turns on the ssl mode
-  replace:
-    replace: 'use_ssl = True'
+  lineinfile:
+    line: 'use_ssl = True'
     regexp: '^.*use_ssl.*'
     dest: /home/pi/.screenly/screenly.conf
+    state: present
+    insertafter: '\\[main\\]'
   tags:
     - enable-ssl
   when: not no_use_ssl_parameter

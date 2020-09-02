@@ -59,14 +59,13 @@
     msg: "Use cmdline.txt.orig for boot parameters (don't remove this file)"
   when: not is_berryboot
 
-- copy:
-    src: /boot/cmdline.txt.orig
-    dest: /boot/cmdline.txt
-    remote_src: true
-    force: yes
-  when: not is_berryboot and config_txt.stdout.find('NOOBS') == -1
-  tags:
-    - touches_boot_partition
+#- copy:
+#    src: /boot/cmdline.txt.orig
+#    dest: /boot/cmdline.txt
+#    remote_src: true
+#  when: not is_berryboot and config_txt.stdout.find('NOOBS') == -1
+#  tags:
+#    - touches_boot_partition
 
 - name: For splash screen using Plymouth
   replace:

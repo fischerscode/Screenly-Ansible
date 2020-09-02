@@ -3,6 +3,7 @@
 - name: Check screenly.conf
   command: cat /home/pi/.screenly/screenly.conf
   register: config
+  changed_when: false
 
 - set_fact: no_ssl="{{config.stdout.find('use_ssl = True') == -1}}"
 
@@ -24,6 +25,7 @@
     mode: 644
     owner: root
     group: root
+    force: false
 
 - name: Modifies screenly-web service to only listen on localhost
   lineinfile:
