@@ -16,17 +16,14 @@
     src: screenly.j2
     dest: /home/pi/.screenly/screenly.conf
     force: yes
-#  register: settings
 
 - name: Copy Screenly default assets file
-  template:
+  copy:
     owner: pi
     group: pi
-    src: default_assets.j2
+    src: default_assets.yml
     dest: /home/pi/.screenly/default_assets.yml
     force: yes
-#  register: settings
-
 
 - name: Remove deprecated parameter "listen"
   lineinfile:
