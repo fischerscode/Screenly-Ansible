@@ -2,8 +2,15 @@
   hosts: all
   user: pi
   become: yes
+
+  vars_files:
+    - ../vars/secrets.yaml
+
   vars:
-    manage_network: "{{ lookup('env', 'MANAGE_NETWORK') }}"
+    manage_network: false
+    proxy_env:
+      http_proxy: "{{ http_proxy }}"
+      https_proxy: "{{ http_proxy }}"
 
   handlers:
     - name: restart-nginx

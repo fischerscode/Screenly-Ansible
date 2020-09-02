@@ -10,20 +10,23 @@
     - .config/uzbl
 
 - name: Copy Screenly default config
-  copy:
+  template:
     owner: pi
     group: pi
-    src: screenly.conf
+    src: screenly.j2
     dest: /home/pi/.screenly/screenly.conf
-    force: no
+    force: yes
+#  register: settings
 
 - name: Copy Screenly default assets file
-  copy:
+  template:
     owner: pi
     group: pi
-    src: default_assets.yml
+    src: default_assets.j2
     dest: /home/pi/.screenly/default_assets.yml
     force: yes
+#  register: settings
+
 
 - name: Remove deprecated parameter "listen"
   lineinfile:
@@ -47,6 +50,12 @@
 
 - name: Install pip dependencies
   pip: requirements=/home/pi/screenly/requirements/requirements.txt
+
+#- name: Delete database if setting changed
+#  file:
+#    path: /home/pi/.screenly/screenly.db
+#    state: absent
+#  when: settings.changed
 
 - name: Create default assets database if does not exists
   copy:

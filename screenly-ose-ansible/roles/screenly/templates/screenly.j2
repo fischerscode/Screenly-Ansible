@@ -5,7 +5,10 @@ database = .screenly/screenly.db
 use_ssl = False
 
 ; Opt-out from analytics
-analytics_opt_out = False
+analytics_opt_out = True
+
+use_24_hour_clock = on
+date_format = dd/mm/yyyy
 
 [viewer]
 ; Player name
@@ -20,6 +23,8 @@ audio_output = hdmi
 
 ; Shuffle playlist before playing (otherwise sorted by name)
 shuffle_playlist = False
+
+default_assets = on
 
 ; Stream asset duration default value (seconds)
 default_streaming_duration = 300
@@ -41,8 +46,8 @@ auth_backend =
 
 [auth_basic]
 ; Fill in with appropriate username and password
-user=
-password=
+user={{ screenly_user }}
+password={{ screenly_password }}
 
 [auth_wott]
 wott_secret_name=screenly
